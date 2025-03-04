@@ -51,6 +51,7 @@ jobs:
             curl -fsSL https://get.docker.com -o get-docker.sh
             sudo sh get-docker.sh
         continue-on-error: false
+
       - name: Instalar Docker Compose
         run: |
           sudo curl -L "https://github.com/docker/compose/releases/download/v2.3.3/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
@@ -61,12 +62,12 @@ jobs:
       - name: Rodar testes de integração
         run: docker compose up test
 
-      - name: Deploy no Heroku
-        uses: akhileshns/heroku-deploy@v3.12.12
-        with:
-          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: "prontuario-backend"
-          heroku_email: "seu-email@dominio.com"
-          usedocker: true
-          healthcheck: "/health"
-          appdir: "."
+#      - name: Deploy no Heroku
+#        uses: akhileshns/heroku-deploy@v3.12.12
+#        with:
+#          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+#          heroku_app_name: "prontuario-backend"
+#          heroku_email: "seu-email@dominio.com"
+#          usedocker: true
+#          healthcheck: "/health"
+#          appdir: "."
