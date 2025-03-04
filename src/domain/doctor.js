@@ -1,9 +1,9 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../config/database");
-const bcrypt = require("bcryptjs");
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/database');
+const bcrypt = require('bcryptjs');
 
 const Doctor = sequelize.define(
-  "Doctor",
+  'Doctor',
   {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     name: { type: DataTypes.STRING, allowNull: false },
@@ -15,7 +15,7 @@ const Doctor = sequelize.define(
     },
     password: { type: DataTypes.STRING, allowNull: false },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
 
 Doctor.beforeCreate(async (doctor) => {

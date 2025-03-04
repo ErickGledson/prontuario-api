@@ -1,13 +1,13 @@
-const express = require("express");
+const express = require('express');
 const {
   getDoctor,
   updateDoctor,
   deleteDoctor,
-} = require("../application/doctorService");
-const logger = require("../config/logger");
+} = require('../application/doctorService');
+const logger = require('../config/logger');
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const { id } = req.user;
     const doctors = await getDoctor(id);
@@ -19,7 +19,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.put("/", async (req, res) => {
+router.put('/', async (req, res) => {
   try {
     const { id } = req.user;
     const doctor = await updateDoctor(id, req.body);
@@ -31,7 +31,7 @@ router.put("/", async (req, res) => {
   }
 });
 
-router.delete("/", async (req, res) => {
+router.delete('/', async (req, res) => {
   try {
     const { id } = req.user;
     const response = await deleteDoctor(id);

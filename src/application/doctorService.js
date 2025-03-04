@@ -1,5 +1,5 @@
-const { Doctor } = require("../domain");
-const bcrypt = require("bcryptjs");
+const { Doctor } = require('../domain');
+const bcrypt = require('bcryptjs');
 
 const createDoctor = async (data) => {
   return await Doctor.create(data);
@@ -7,7 +7,7 @@ const createDoctor = async (data) => {
 
 const getDoctor = async (id) => {
   return await Doctor.findOne({
-    attributes: { exclude: ["password", "createdAt", "updatedAt"] },
+    attributes: { exclude: ['password', 'createdAt', 'updatedAt'] },
     where: { id },
   });
 };
@@ -15,7 +15,7 @@ const getDoctor = async (id) => {
 const updateDoctor = async (id, data) => {
   const doctor = await Doctor.findByPk(id);
   if (!doctor) {
-    throw new Error("Doutor não encontrado");
+    throw new Error('Doutor não encontrado');
   }
 
   if (data.password) {
@@ -28,11 +28,11 @@ const updateDoctor = async (id, data) => {
 const deleteDoctor = async (id) => {
   const doctor = await Doctor.findByPk(id);
   if (!doctor) {
-    throw new Error("Doutor não encontrado");
+    throw new Error('Doutor não encontrado');
   }
 
   await doctor.destroy();
-  return { message: "Doutor excluído com sucesso" };
+  return { message: 'Doutor excluído com sucesso' };
 };
 
 module.exports = { createDoctor, getDoctor, updateDoctor, deleteDoctor };

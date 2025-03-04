@@ -1,10 +1,10 @@
-const express = require("express");
-const { login } = require("../application/authService");
-const { createDoctor } = require("../application/doctorService");
-const logger = require("../config/logger");
+const express = require('express');
+const { login } = require('../application/authService');
+const { createDoctor } = require('../application/doctorService');
+const logger = require('../config/logger');
 const router = express.Router();
 
-router.post("/signin", async (req, res) => {
+router.post('/signin', async (req, res) => {
   try {
     const { email, password } = req.body;
     const token = await login(email, password);
@@ -14,7 +14,7 @@ router.post("/signin", async (req, res) => {
   }
 });
 
-router.post("/signup", async (req, res) => {
+router.post('/signup', async (req, res) => {
   try {
     const doctor = await createDoctor(req.body);
     logger.info(`Doutor criado com id: ${doctor.id}`);

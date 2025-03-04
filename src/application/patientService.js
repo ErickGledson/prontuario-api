@@ -1,5 +1,5 @@
-const { Patient } = require("../domain");
-const redis = require("../config/redis");
+const { Patient } = require('../domain');
+const redis = require('../config/redis');
 
 const getPatients = async (page = 1, limit = 10) => {
   const cacheKey = `patients:${page}:${limit}`;
@@ -13,12 +13,12 @@ const getPatients = async (page = 1, limit = 10) => {
     limit,
     offset,
     attributes: {
-      exclude: ["createdAt", "updatedAt", "deletedAt"],
+      exclude: ['createdAt', 'updatedAt', 'deletedAt'],
     },
   });
   const result = { total: count, page, perPage: limit, patients: rows };
 
-  await redis.set(cacheKey, JSON.stringify(result), "EX", 60 * 5);
+  await redis.set(cacheKey, JSON.stringify(result), 'EX', 60 * 5);
   return result;
 };
 
@@ -29,11 +29,11 @@ const createPatient = async (data) => {
 const updatePatient = async (id, data) => {
   const patient = await Patient.findByPk(id, {
     attributes: {
-      exclude: ["createdAt", "updatedAt"],
+      exclude: ['createdAt', 'updatedAt'],
     },
   });
   if (!patient) {
-    throw new Error("Paciente não encontrado");
+    throw new Error('Paciente não encontrado');
   }
   return await patient.update(data);
 };
@@ -41,12 +41,12 @@ const updatePatient = async (id, data) => {
 const deletePatient = async (id) => {
   const patient = await Patient.findByPk(id);
   if (!patient) {
-    throw new Error("Paciente não encontrado");
+    throw new Error('Paciente não encontrado');
   }
 
   await Patient.destroy({ where: { id }, individualHooks: true });
 
-  return { message: "Paciente excluído com sucesso" };
+  return { message: 'Paciente excluído com sucesso' };
 };
 
 module.exports = {

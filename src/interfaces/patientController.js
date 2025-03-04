@@ -1,14 +1,14 @@
-const express = require("express");
+const express = require('express');
 const {
   createPatient,
   getPatients,
   updatePatient,
   deletePatient,
-} = require("../application/patientService");
-const logger = require("../config/logger");
+} = require('../application/patientService');
+const logger = require('../config/logger');
 const router = express.Router();
 
-router.post("/", async (req, res) => {
+router.post('/', async (req, res) => {
   try {
     const patient = await createPatient(req.body);
     logger.info(`Paciente criado com id: ${patient.id}`);
@@ -19,7 +19,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/", async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const { page = 1, limit = 10 } = req.query;
     const patients = await getPatients(parseInt(page), parseInt(limit));
@@ -31,7 +31,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.put("/:id", async (req, res) => {
+router.put('/:id', async (req, res) => {
   try {
     const patient = await updatePatient(req.params.id, req.body);
     logger.info(`Paciente ${patient.id} atualizado`);
@@ -42,7 +42,7 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const result = await deletePatient(id);

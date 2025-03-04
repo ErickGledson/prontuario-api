@@ -1,11 +1,11 @@
 module.exports = [
   {
-    ignores: ["node_modules", "dist"],
+    ignores: ['node_modules', 'dist'],
   },
   {
-    files: ["**/*.js"],
+    files: ['**/*.js'],
     rules: {
-      curly: ["error", "all"],
+      curly: ['error', 'all'],
     },
   },
 ];
