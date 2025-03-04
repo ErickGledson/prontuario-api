@@ -1,20 +1,20 @@
-const express = require('express');
+const express = require("express");
 const {
   createAppointment,
   getAppointments,
   updateAppointment,
   deleteAppointment,
   addNotesToAppointment,
-} = require('../application/appointmentService');
-const logger = require('../config/logger');
+} = require("../application/appointmentService");
+const logger = require("../config/logger");
 const router = express.Router();
 
-router.post('/', async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const { patientId, date } = req.body;
     const appointment = await createAppointment(patientId, date);
     logger.info(
-      `Consulta agendada: id ${appointment.id} para o paciente ${patientId} em ${date}`
+      `Consulta agendada: id ${appointment.id} para o paciente ${patientId} em ${date}`,
     );
     res.status(201).json(appointment);
   } catch (err) {
@@ -23,12 +23,12 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.get('/', async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const { page = 1, limit = 10 } = req.query;
     const appointments = await getAppointments(parseInt(page), parseInt(limit));
     logger.info(
-      `Listagem de consultas realizada, total: ${appointments.total}`
+      `Listagem de consultas realizada, total: ${appointments.total}`,
     );
     res.json(appointments);
   } catch (err) {
@@ -37,11 +37,11 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.put('/:id', async (req, res) => {
+router.put("/:id", async (req, res) => {
   try {
     const appointment = await updateAppointment(req.params.id, req.body.date);
     logger.info(
-      `Consulta ${appointment.id} atualizada para novo horário: ${req.body.date}`
+      `Consulta ${appointment.id} atualizada para novo horário: ${req.body.date}`,
     );
     res.json(appointment);
   } catch (err) {
@@ -50,7 +50,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
     const response = await deleteAppointment(req.params.id);
     logger.info(`Consulta ${req.params.id} excluída`);
@@ -61,7 +61,7 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-router.put('/:id/notes', async (req, res) => {
+router.put("/:id/notes", async (req, res) => {
   try {
     const { notes } = req.body;
     const appointment = await addNotesToAppointment(req.params.id, notes);

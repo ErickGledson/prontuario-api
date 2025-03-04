@@ -4,7 +4,7 @@ services:
       context: .
       target: dev
     ports:
-      - '3000:3000'
+      - "3000:3000"
     volumes:
       - .:/app
     environment:
@@ -29,7 +29,7 @@ services:
       context: .
       target: release
     ports:
-      - '3000:3000'
+      - "3000:3000"
     volumes:
       - .:/app
     environment:
@@ -56,11 +56,11 @@ services:
       MYSQL_ROOT_PASSWORD: senha
       MYSQL_DATABASE: prontuario
     ports:
-      - '3306:3306'
+      - "3306:3306"
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
-      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
       timeout: 20s
       retries: 10
@@ -71,10 +71,10 @@ services:
     image: redis:7
     restart: always
     ports:
-      - '6379:6379'
+      - "6379:6379"
     command: redis-server --save 20 1 --loglevel warning
     healthcheck:
-      test: ['CMD', 'redis-cli', 'ping']
+      test: ["CMD", "redis-cli", "ping"]
       interval: 10s
       timeout: 20s
       retries: 10
@@ -104,5 +104,5 @@ services:
       - prontuario
 
 networks:
-  'prontuario':
+  "prontuario":
     driver: bridge

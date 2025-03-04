@@ -22,7 +22,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LoginInput'
+              $ref: "#/components/schemas/LoginInput"
       responses:
         "200":
           description: Login realizado com sucesso.
@@ -40,21 +40,21 @@ paths:
     post:
       summary: Registro de médico
       description: Cria um novo médico na plataforma.
-      security: [ ]
+      security: []
       requestBody:
         description: Dados do médico para registro.
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DoctorInput'
+              $ref: "#/components/schemas/DoctorInput"
       responses:
         "201":
           description: Médico registrado com sucesso.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Doctor'
+                $ref: "#/components/schemas/Doctor"
         "400":
           description: Erro de validação ou médico já existe.
   /doctors:
@@ -63,13 +63,13 @@ paths:
       description: Retorna o cadastro do médico.
       responses:
         "200":
-          description:  Perfil do médico retornado com sucesso.
+          description: Perfil do médico retornado com sucesso.
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Doctor'
+                  $ref: "#/components/schemas/Doctor"
     put:
       summary: Atualizar dados de um médico
       description: Atualiza as informações de um médico cadastrado.
@@ -96,7 +96,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Doctor'
+                $ref: "#/components/schemas/Doctor"
         "400":
           description: Erro ao atualizar médico.
     delete:
@@ -119,14 +119,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PatientInput'
+              $ref: "#/components/schemas/PatientInput"
       responses:
         "201":
           description: Paciente criado com sucesso.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Patient'
+                $ref: "#/components/schemas/Patient"
         "400":
           description: Erro de validação ou paciente já existe.
     get:
@@ -142,7 +142,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Patient'
+                  $ref: "#/components/schemas/Patient"
   /patients/{id}:
     put:
       summary: Atualizar paciente
@@ -162,14 +162,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PatientInput'
+              $ref: "#/components/schemas/PatientInput"
       responses:
         "200":
           description: Paciente atualizado com sucesso.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Patient'
+                $ref: "#/components/schemas/Patient"
         "400":
           description: Erro de validação ou paciente não encontrado.
     delete:
@@ -201,14 +201,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AppointmentInput'
+              $ref: "#/components/schemas/AppointmentInput"
       responses:
         "201":
           description: Consulta agendada com sucesso.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Appointment'
+                $ref: "#/components/schemas/Appointment"
         "400":
           description: Erro de validação ou conflito de horário.
     get:
@@ -224,7 +224,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Appointment'
+                  $ref: "#/components/schemas/Appointment"
   /appointments/{id}:
     put:
       summary: Atualizar consulta
@@ -256,7 +256,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Appointment'
+                $ref: "#/components/schemas/Appointment"
         "400":
           description: Erro de validação ou conflito de horário.
     delete:
@@ -306,7 +306,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Appointment'
+                $ref: "#/components/schemas/Appointment"
         "400":
           description: Erro ao atualizar a anotação.
 
