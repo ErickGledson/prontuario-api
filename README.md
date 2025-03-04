@@ -224,6 +224,8 @@ docker-compose up --build test
 
 A documentação da API está disponível no arquivo `openapi.yaml`.
 
+Para o MER (Modelo Entidade Relacionamento), pode consultar no arquivo `MER.png`.
+
 ## Deploy
 
 Há configurado o `github actions` onde roda a pipeline de testes.
