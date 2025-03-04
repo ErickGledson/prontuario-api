@@ -73,11 +73,13 @@ Docker
 Para rodar o projeto com Docker, utilize o `docker-compose.yaml`:
 
 Para produção
+
 ```sh
 docker-compose up --build prod
 ```
 
 Para desenvolvimento
+
 ```sh
 docker-compose up --build dev
 ```
