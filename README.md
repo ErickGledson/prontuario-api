@@ -68,7 +68,9 @@ JWT_SECRET=secreto
 PORT=3000
 ```
 
-Docker
+## Docker
+
+Este projeto, para `testes` e `produção`, utiliza o conceito de distroless.
 
 Para rodar o projeto com Docker, utilize o `docker-compose.yaml`:
 
@@ -222,3 +224,9 @@ docker-compose up --build test
 ## Documentação
 
 A documentação da API está disponível no arquivo `openapi.yaml`.
+
+## Deploy
+
+Há configurado o `github actions` onde roda a pipeline de testes.
+
+A parte de deploy na heroku foi comentada/removida do pipeline.
