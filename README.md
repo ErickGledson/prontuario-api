@@ -41,7 +41,6 @@ Docker
 Jest (para testes)
 Supertest (para testes de integração)
 Winston (para logging)
-Swagger (para documentação da API)
 
 ## Padrões de Código
 
