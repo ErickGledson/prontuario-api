@@ -16,6 +16,7 @@ services:
       - DB_PASS=senha
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+      - JWT_SECRET=secret
     depends_on:
       db:
         condition: service_healthy
@@ -41,6 +42,7 @@ services:
       - DB_PASS=senha
       - REDIS_HOST=redis
       - REDIS_PORT=6379
+      - JWT_SECRET=secret
     depends_on:
       db:
         condition: service_healthy
@@ -95,6 +97,7 @@ services:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - PORT=3005
+      - JWT_SECRET=secret
     depends_on:
       db:
         condition: service_healthy
