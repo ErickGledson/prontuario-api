@@ -1,0 +1,108 @@
+services:
+  dev:
+    build:
+      context: .
+      target: dev
+    ports:
+      - '3000:3000'
+    volumes:
+      - .:/app
+    environment:
+      - NODE_ENV=dev
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_NAME=prontuario_dev
+      - DB_USER=root
+      - DB_PASS=senha
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - prontuario
+
+  prod:
+    build:
+      context: .
+      target: release
+    ports:
+      - '3000:3000'
+    volumes:
+      - .:/app
+    environment:
+      - NODE_ENV=production
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_NAME=prontuario
+      - DB_USER=root
+      - DB_PASS=senha
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - prontuario
+
+  db:
+    image: mysql:8
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: senha
+      MYSQL_DATABASE: prontuario
+    ports:
+      - '3306:3306'
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
+      interval: 10s
+      timeout: 20s
+      retries: 10
+    networks:
+      - prontuario
+
+  redis:
+    image: redis:7
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 20s
+      retries: 10
+    networks:
+      - prontuario
+
+  test:
+    build:
+      context: .
+      target: test
+    environment:
+      - NODE_ENV=test
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_NAME=prontuario_test
+      - DB_USER=root
+      - DB_PASS=senha
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - PORT=3005
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - prontuario
+
+networks:
+  'prontuario':
+    driver: bridge
