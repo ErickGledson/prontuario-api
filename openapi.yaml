@@ -1,0 +1,453 @@
+openapi: 3.0.3
+info:
+  title: Prontuário Eletrônico API
+  version: "1.0.0"
+  description: >
+    API para gerenciamento de pacientes, agendamento de consultas e anotações médicas.
+    Permite cadastrar, atualizar, listar e anonimizar pacientes (LGPD);
+    agendar, atualizar, excluir consultas e registrar anotações durante as consultas;
+    além de autenticação via JWT e registro de médicos.
+servers:
+  - url: http://localhost:3000
+    description: Ambiente de desenvolvimento
+paths:
+  /auth/signin:
+    post:
+      summary: Login do médico
+      description: Realiza o login do médico e retorna um token JWT.
+      security: []
+      requestBody:
+        description: Credenciais para login.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginInput'
+      responses:
+        "200":
+          description: Login realizado com sucesso.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: Token JWT.
+        "401":
+          description: Credenciais inválidas.
+  /auth/signup:
+    post:
+      summary: Registro de médico
+      description: Cria um novo médico na plataforma.
+      security: [ ]
+      requestBody:
+        description: Dados do médico para registro.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DoctorInput'
+      responses:
+        "201":
+          description: Médico registrado com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Doctor'
+        "400":
+          description: Erro de validação ou médico já existe.
+  /doctors:
+    get:
+      summary: Listar o perfil médico
+      description: Retorna o cadastro do médico.
+      responses:
+        "200":
+          description:  Perfil do médico retornado com sucesso.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Doctor'
+    put:
+      summary: Atualizar dados de um médico
+      description: Atualiza as informações de um médico cadastrado.
+      requestBody:
+        description: Dados para atualização do médico.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "Dr. João Atualizado"
+                email:
+                  type: string
+                  example: "joao@email.com"
+                password:
+                  type: string
+                  example: "novaSenha123"
+      responses:
+        "200":
+          description: Médico atualizado com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Doctor'
+        "400":
+          description: Erro ao atualizar médico.
+    delete:
+      summary: Excluir um médico
+      description: Remove um médico da plataforma.
+      responses:
+        "200":
+          description: Médico excluído com sucesso.
+        "400":
+          description: Erro ao excluir médico.
+  /patients:
+    post:
+      summary: Cadastrar um paciente
+      description: Cria um novo paciente com os dados pessoais.
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Dados do paciente para criação.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatientInput'
+      responses:
+        "201":
+          description: Paciente criado com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Patient'
+        "400":
+          description: Erro de validação ou paciente já existe.
+    get:
+      summary: Listar pacientes
+      description: Retorna a lista de pacientes cadastrados.
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Lista de pacientes.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Patient'
+  /patients/{id}:
+    put:
+      summary: Atualizar paciente
+      description: Atualiza os dados de um paciente.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID do paciente.
+          schema:
+            type: integer
+      requestBody:
+        description: Dados para atualização do paciente.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatientInput'
+      responses:
+        "200":
+          description: Paciente atualizado com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Patient'
+        "400":
+          description: Erro de validação ou paciente não encontrado.
+    delete:
+      summary: Anonimizar paciente (LGPD)
+      description: Remove dados pessoais do paciente, mantendo o histórico de consultas.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID do paciente.
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Paciente anonimizado com sucesso.
+        "400":
+          description: Erro ao anonimizar o paciente.
+  /appointments:
+    post:
+      summary: Agendar uma consulta
+      description: Cria um novo agendamento de consulta para um paciente.
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Dados do agendamento.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppointmentInput'
+      responses:
+        "201":
+          description: Consulta agendada com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Appointment'
+        "400":
+          description: Erro de validação ou conflito de horário.
+    get:
+      summary: Listar consultas
+      description: Retorna a lista de consultas agendadas.
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Lista de consultas.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Appointment'
+  /appointments/{id}:
+    put:
+      summary: Atualizar consulta
+      description: Atualiza a data/hora de um agendamento de consulta.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID da consulta.
+          schema:
+            type: integer
+      requestBody:
+        description: Nova data/hora para a consulta.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                date:
+                  type: string
+                  format: date-time
+                  example: "2025-03-10T14:00:00.000Z"
+      responses:
+        "200":
+          description: Consulta atualizada com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Appointment'
+        "400":
+          description: Erro de validação ou conflito de horário.
+    delete:
+      summary: Excluir consulta
+      description: Remove o agendamento de uma consulta.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID da consulta.
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Consulta excluída com sucesso.
+        "400":
+          description: Erro ao excluir a consulta.
+  /appointments/{id}/notes:
+    put:
+      summary: Adicionar/atualizar anotações da consulta
+      description: Permite registrar ou atualizar anotações para uma consulta.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID da consulta.
+          schema:
+            type: integer
+      requestBody:
+        description: Dados da anotação.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                notes:
+                  type: string
+                  example: "Paciente apresentou sintomas de febre e tosse."
+      responses:
+        "200":
+          description: Anotação atualizada com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Appointment'
+        "400":
+          description: Erro ao atualizar a anotação.
+
+components:
+  schemas:
+    Patient:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "João Silva"
+        phone:
+          type: string
+          example: "999999999"
+        email:
+          type: string
+          example: "joao@email.com"
+        birthdate:
+          type: string
+          format: date
+          example: "2000-01-01"
+        gender:
+          type: string
+          example: "M"
+        height:
+          type: number
+          example: 1.80
+        weight:
+          type: number
+          example: 75
+    PatientInput:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "João Silva"
+        phone:
+          type: string
+          example: "999999999"
+        email:
+          type: string
+          example: "joao@email.com"
+        birthdate:
+          type: string
+          format: date
+          example: "2000-01-01"
+        gender:
+          type: string
+          example: "M"
+        height:
+          type: number
+          example: 1.80
+        weight:
+          type: number
+          example: 75
+      required:
+        - name
+        - phone
+        - email
+        - birthdate
+        - gender
+        - height
+        - weight
+    Appointment:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 10
+        patientId:
+          type: integer
+          example: 1
+        date:
+          type: string
+          format: date-time
+          example: "2025-03-10T14:00:00.000Z"
+        notes:
+          type: string
+          example: "Paciente apresentou sintomas de febre e tosse."
+    AppointmentInput:
+      type: object
+      properties:
+        patientId:
+          type: integer
+          example: 1
+        date:
+          type: string
+          format: date-time
+          example: "2025-03-10T14:00:00.000Z"
+      required:
+        - patientId
+        - date
+    LoginInput:
+      type: object
+      properties:
+        email:
+          type: string
+          example: "doctor@mail.com"
+        password:
+          type: string
+          example: "123456"
+      required:
+        - email
+        - password
+    Doctor:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Dr. Silva"
+        email:
+          type: string
+          example: "doctor@mail.com"
+    DoctorInput:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Dr. Silva"
+        email:
+          type: string
+          example: "doctor@mail.com"
+        password:
+          type: string
+          example: "123456"
+      required:
+        - name
+        - email
+        - password
+  securitySchemes:
+    bearerAuth:
+      type: apiKey
+      scheme: bearer
+      name: x-auth-token
+      in: header
+
+security:
+  - bearerAuth: []
