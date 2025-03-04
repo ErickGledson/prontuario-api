@@ -52,7 +52,7 @@ Prettier para formatação de código
 
 Variáveis de Ambiente
 
-As variáveis de ambiente são configuradas no arquivo `.env`:
+As variáveis de ambiente podem ser configuradas no arquivo `.env` caso queira rodar a aplicação localmente (somente o servidor):
 
 ```env
 DB_HOST=localhost
